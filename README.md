@@ -64,3 +64,6 @@ if you enter `1` here, it will commit 'So, you're cutting the timeline in half?'
 if you enter `3` here, it will merge 'So, you're cutting the timeline in half?' and ' Well I guess the team can't possibly' and ask again.
 
 if you enter `5` here, it will discard 'So, you're cutting the timeline in half?'
+
+## Option
+You can download subtitles of videos that satisfy some options by editing L27 of python code. About it, please refer [youtube-dl](https://github.com/rg3/youtube-dl/#options)
