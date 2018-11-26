@@ -14,6 +14,7 @@ import sys
 import glob
 import webvtt
 import json
+import requests
 from datetime import datetime
 
 manualMode = input("Would you like to manually merge some splitted sentences? (y/n) \n")
@@ -24,7 +25,7 @@ print(" 🧐  Download subtitles from " + URL + " 🧐")
 print("===============================================================================================")
 
 os.system('mkdir result') # to init the result folder
-os.system('youtube-dl --write-sub --sub-lang en,en-US,en-UK --skip-download -ciw -o "%(title)s__|__%(id)s__|__%(duration)s.%(ext)s" ' + URL)
+os.system('youtube-dl --write-sub --sub-lang en,en-US,en-GB --skip-download -ciw -o "%(title)s__|__%(id)s__|__%(duration)s__|__%(channel_id)s__|__%(create_date)s__|__%(alt_title)s__|__%(age_limit)s__|__%(view_count)s__|__%(like_count)s__|__%(dislike_count)s__|__%(repost_count)s__|__%(comment_count)s.%(ext)s" ' + URL)
 
 print("===============================================================================================")
 print(" 😎  Download completed!  😎 ")
@@ -39,8 +40,28 @@ for rawFilename in glob.glob('*.vtt'):
     filename = rawFilename.split('__|__')
     title = filename[0]
     youTubeVideoId = filename[1]
-    fullDurationInMs = int(filename[2].split('.en')[0]) * 1000
+    fullDurationInMs = int(filename[2]) * 1000
+    channelId = filename[3]
+    publishedAt = filename[4]
+    description = filename[5]
+    contentRating = filename[6]
+    statistics = {
+        "viewCount" : filename[7],
+        "likeCount" : filename[8],
+        "dislikeCount" : filename[9],
+        "favoriteCount" : filename[10],
+        "commentCount" : filename[11].split('.en')[0],
+    }
+    URL = "https://api.unblockvideos.com/youtube_restrictions?id=" + youTubeVideoId
+    response = requests.get(URL)
+    blocked = response.text.split('"blocked":[')[1].split("]")[0]
     
+    if len(blocked) == 0:
+        blocked = []
+    else:
+        blocked = blocked.split(',')
+        blocked = list(map(lambda x: x.strip('"'), blocked))
+
     fragments = dict()
 
     if manualMode != 'y' and manualMode != 'Y':
@@ -118,13 +139,19 @@ for rawFilename in glob.glob('*.vtt'):
 
     JSON = {
         "youTubeVideoId" : youTubeVideoId,
+        "channelId" : channelId,
+        "publishedAt" : publishedAt,
         "title" : title,
+        "description" : description,
+        "contentRating" : contentRating,
+        "statistics" : statistics,
         "createdAt" : None,
         "durationInMs" : fullDurationInMs,
         "fullDurationInMs" : fullDurationInMs,
         "description" : "",
         "tags" : [],
         "fragments" : fragments,
+        "regionRestriction" : blocked,
     }
 
     # Fix this line to change the file names of JSONs
