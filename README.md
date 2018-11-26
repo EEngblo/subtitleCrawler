@@ -1,11 +1,11 @@
 # Subtitle Crawler for RedKiwi
 ## Install
 ### 1. Install Python 3: [download](https://www.python.org/downloads/)
-### 2. Install [youtube-dl](https://github.com/rg3/youtube-dl/)
+### 2. Install pip3: [follow this](https://itsevans.com/install-pip-osx/)
+### 3. Install [youtube-dl](https://github.com/rg3/youtube-dl/)
 ```bash
 brew install youtube-dl
 ```
-### 3. Install pip3: [follow this](https://itsevans.com/install-pip-osx/)
 ### 4. Install [webvtt-py](https://github.com/glut23/webvtt-py)
 ```bash
 pip3 install webvtt-py
@@ -64,3 +64,6 @@ if you enter `1` here, it will commit 'So, you're cutting the timeline in half?'
 if you enter `3` here, it will merge 'So, you're cutting the timeline in half?' and ' Well I guess the team can't possibly' and ask again.
 
 if you enter `5` here, it will discard 'So, you're cutting the timeline in half?'
+
+## Option
+You can download subtitles of videos that satisfy some options by editing L27 of python code. About it, please refer [youtube-dl](https://github.com/rg3/youtube-dl/#options)
